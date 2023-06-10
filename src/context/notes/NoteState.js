@@ -31,17 +31,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const json = await response.json();
-    console.log(json);
-    let note = {
-      _id: "6480587a7589dsss633a02f384a4",
-      user: "647f17d456d78d643e86cfd8",
-      title: title,
-      description: description,
-      tag: tag,
-      date: "2023-06-07T10:14:18.868Z",
-      __v: 0,
-    };
+    const note = await response.json();
     setNotes(notes.concat(note));
   };
   //Delete a Note
@@ -55,7 +45,7 @@ const NoteState = (props) => {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ3ZjE3ZDQ1NmQ3OGQ2NDNlODZjZmQ4In0sImlhdCI6MTY4NjEzMDYwOH0.ah-8t2f4oA6eyuO8PFEVtBM7FUsPgULk1Flx4pV0eOY",
       },
     });
-    const json = response.json();
+    const json = await response.json();
     console.log(json);
     const newNotes = notes.filter((note) => {
       return note._id !== id;
@@ -66,7 +56,7 @@ const NoteState = (props) => {
   const editNote = async (id, title, description, tag) => {
     //TODO: API Call
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
@@ -74,18 +64,21 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const json = response.json();
-    console.log(json);
+    const json = await response.json();
+    //console.log(json);
 
     //Logic to edit client notes
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    let newNotes = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
+        break;
       }
     }
+    setNotes(newNotes);
   };
 
   return (

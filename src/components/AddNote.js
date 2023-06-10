@@ -3,15 +3,24 @@ import noteContext from "../context/notes/noteContext";
 
 const AddNote = () => {
   const context = useContext(noteContext);
-    const { addNote } = context;
-    const[note,setNote]=useState({title:"",description:"",tag:"default"})
-    const handleClick = (e) => {
-        e.preventDefault();
-        addNote(note.title,note.description,note.tag);
-     };
-    const onChange = (e) => {
-        setNote({...note,[e.target.name]:e.target.value});
-    }
+  const { addNote } = context;
+  const [note, setNote] = useState({
+    title: "",
+    description: "",
+    tag: "",
+  });
+  const handleClick = (e) => {
+    e.preventDefault();
+    addNote(note.title, note.description, note.tag);
+    setNote({
+      title: "",
+      description: "",
+      tag: "",
+    });
+  };
+  const onChange = (e) => {
+    setNote({ ...note, [e.target.name]: e.target.value });
+  };
   return (
     <div className="container my-3">
       <h1>Add a Notes</h1>
@@ -21,6 +30,7 @@ const AddNote = () => {
             Title
           </label>
           <input
+            value={note.title}
             type="text"
             className="form-control"
             id="title"
@@ -34,6 +44,7 @@ const AddNote = () => {
             Description
           </label>
           <input
+            value={note.description}
             type="text"
             className="form-control"
             id="description"
@@ -46,6 +57,7 @@ const AddNote = () => {
             Tag
           </label>
           <input
+            value={note.tag}
             type="text"
             className="form-control"
             id="tag"
@@ -53,7 +65,12 @@ const AddNote = () => {
             onChange={onChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary" onClick={handleClick}>
+        <button
+          disabled={note.title.length < 5 || note.description.length < 5}
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleClick}
+        >
           Add Note
         </button>
       </form>
