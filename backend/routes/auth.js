@@ -1,12 +1,13 @@
+require('dotenv').config();
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
+const jwt = require(process.env.JWT_TOKEN);
 var fetchuser = require("../middleware/fetchuser");
 
-const JWT_SECRET = "Rahulsharam999";
+const JWT_SECRET = process.env.JWT_SECRETT;
 //Route1 : create a new user "api/auth/createuser"
 router.post(
   "/createuser",
