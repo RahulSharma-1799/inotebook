@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Login = (props) => {
-  const url = process.env.URL || "http://localhost:5000";
-    const [credentials, setCredentials] = useState({ email: "", password: "" });
-    let navigate = useNavigate();
+  const url = "https://inotebook-24wn.onrender.com" || "http://localhost:5000";
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`https://inotebook-24wn.onrender.com/api/auth/login`, {
+    const response = await fetch(`${url}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,16 +17,15 @@ const Login = (props) => {
       }),
     });
     const json = await response.json();
-      //console.log(json);
-      if (json.success) {
-          //redirect to
-          localStorage.setItem('token', json.authtoken);
-          props.showAlert("Logged in Successfully", "success");
-          navigate("/");
-      }
-      else {
-          props.showAlert("Invalid Details","danger")
-      }
+    //console.log(json);
+    if (json.success) {
+      //redirect to
+      localStorage.setItem("token", json.authtoken);
+      props.showAlert("Logged in Successfully", "success");
+      navigate("/");
+    } else {
+      props.showAlert("Invalid Details", "danger");
+    }
   };
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
